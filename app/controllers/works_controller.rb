@@ -21,6 +21,7 @@ class WorksController < ApplicationController
 
   def create
     @work = Work.new(media_params)
+    @work.user_id = session[:user_id]
     @media_category = @work.category
     if @work.save
       flash[:status] = :success

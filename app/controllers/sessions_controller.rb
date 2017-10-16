@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   def login
     auth_hash = request.env['omniauth.auth']
 
-    user = User.find_by(uid: auth_hash['uid'])
+    user = User.find_by(uid: auth_hash['uid'], provider: auth_hash['provider'])
 
     if user
       flash[:status] = :success

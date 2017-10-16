@@ -8,11 +8,10 @@ class SessionsController < ApplicationController
     user = User.find_by(uid: auth_hash['uid'])
 
     if user
-      session[:user_id] = user.id
       flash[:status] = :success
       flash[:result_text] = "Successfully logged in as existing user #{user.username}"
     else
-      user = User.by_auth_hash(provider, auth_hash)
+      user = User.by_auth_hash(auth_hash)
       if user.save
         flash[:status] = :success
         flash[:result_text] = "Successfully created new user #{user.username} with ID #{user.id}"
@@ -22,9 +21,9 @@ class SessionsController < ApplicationController
         flash.now[:messages] = user.errors.messages
         return render "login_form", status: :bad_request
       end
-      session[:user_id] = user.id
-      redirect_to root_path
     end
+    session[:user_id] = user.id
+    redirect_to root_path
   end
 
   def logout

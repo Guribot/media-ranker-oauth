@@ -18,6 +18,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def check_ownership
+    unless session[:user_id] == @work.user_id
+      flash[:status] = :failure
+      flash[:result_text] = 'You may not modify another user\'s work.'
+      return redirect_to root_path
+    end
+  end
+
   private
   def find_user
     if session[:user_id]
